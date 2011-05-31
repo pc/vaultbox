@@ -60,12 +60,12 @@ module VaultBox
       @repo ||= Grit::Repo.new(dir)
     end
 
-    def commit(*f)
+    def commit(name, *f)
       Dir.chdir(dir) do
         self.repo.add(*f)
         t = Time.now.utc.iso8601
         h = Config.hostname
-        self.repo.commit_all("Automated commit at #{t} on #{h}")
+        self.repo.commit_all("[#{name}] Automated commit at #{t} on #{h}")
       end
     end
 
@@ -87,7 +87,7 @@ module VaultBox
       p = File.join(dir, name, Time.now.utc.iso8601)
       FileUtils.mkdir_p(d)
       File.open(p, 'w') {|f| f.write(str)}
-      commit(d, p)
+      commit(name, d, p)
     end
   end
 
@@ -145,7 +145,7 @@ module VaultBox
   end
 
   def self.usage
-    $stderr.puts "#{File.basename($0)} [get|set|ls] [key]"
+    $stderr.puts "#{File.basename($0)} [get|set|ls|gen] [key]"
   end
 
   def self.init
