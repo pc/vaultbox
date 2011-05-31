@@ -5,6 +5,7 @@ require 'fileutils'
 require 'socket'
 require 'grit'
 require 'ruby_gpg'
+require 'securerandom'
 
 module RubyGpg
   def gpg_command
@@ -102,6 +103,18 @@ module VaultBox
     end
   end
 
+  module Gen
+    def self.randstr(len=12)
+      str = SecureRandom.random_bytes(len * 24).gsub(/[^A-Za-z0-9_]/, '')
+      if str.size >= len
+        str[0..(len-1)]
+      else
+        # should basically never happen
+        randstr(len, opts)
+      end
+    end
+  end
+
   def self.get
     if k = ARGV.shift
       fn = FS.latest(k)
@@ -120,6 +133,10 @@ module VaultBox
     else
       usage
     end
+  end
+
+  def self.gen
+    puts Gen.randstr
   end
 
   def self.ls
@@ -144,6 +161,7 @@ module VaultBox
     when 'get' then get
     when 'set' then set
     when 'ls' then ls
+    when 'gen' then gen
     when 'init' then init
     else ls; usage
     end
