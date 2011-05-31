@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'rubygems'
 require 'fileutils'
 require 'socket'
@@ -126,7 +128,7 @@ module VaultBox
   end
 
   def self.usage
-    $stderr.puts "#{__FILE__} [get|set|ls] [key]"
+    $stderr.puts "#{File.basename($0)} [get|set|ls] [key]"
   end
 
   def self.init
