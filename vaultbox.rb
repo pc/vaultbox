@@ -121,7 +121,8 @@ module VaultBox
   end
 
   def self.ls
-    puts FS.passwords.join("\n")
+    pws = FS.passwords
+    puts pws.join("\n") unless pws.empty?
   end
 
   def self.usage
@@ -142,7 +143,7 @@ module VaultBox
     when 'set' then set
     when 'ls' then ls
     when 'init' then init
-    else usage
+    else ls; usage
     end
   end
 end
